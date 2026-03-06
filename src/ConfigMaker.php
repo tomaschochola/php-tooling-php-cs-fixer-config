@@ -23,7 +23,7 @@ use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
 /**
  * @no-named-arguments
  */
-readonly class ConfigFactory
+readonly class ConfigMaker
 {
     /**
      * @param array<string, array<string, mixed>|bool> $rules

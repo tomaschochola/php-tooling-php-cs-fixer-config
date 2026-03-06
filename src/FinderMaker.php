@@ -20,7 +20,7 @@ use PhpCsFixer\Finder;
 /**
  * @no-named-arguments
  */
-readonly class FinderFactory
+readonly class FinderMaker
 {
     public static function make(): Finder
     {

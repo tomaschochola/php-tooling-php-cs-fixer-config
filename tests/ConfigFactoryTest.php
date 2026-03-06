@@ -20,14 +20,14 @@ use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\Test;
 use PhpCsFixer\Finder;
-use TomasChochola\Tooling\PhpCsFixerConfig\ConfigFactory;
+use TomasChochola\Tooling\PhpCsFixerConfig\ConfigMaker;
 
 /**
  * @internal
  *
  * @no-named-arguments
  */
-#[CoversClass(ConfigFactory::class)]
+#[CoversClass(ConfigMaker::class)]
 #[Small]
 final class ConfigFactoryTest extends TestCase
 {
@@ -35,6 +35,6 @@ final class ConfigFactoryTest extends TestCase
     #[Test]
     public function testMake(): void
     {
-        ConfigFactory::make(self::createStub(Finder::class), []);
+        ConfigMaker::make(self::createStub(Finder::class), []);
     }
 }
