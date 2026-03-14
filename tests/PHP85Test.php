@@ -27,7 +27,7 @@ use TomasChochola\Tooling\PhpCsFixerConfig\PHP85;
  */
 #[CoversClass(PHP85::class)]
 #[Small]
-final class PHP85Test extends TestCase
+class PHP85Test extends TestCase
 {
     #[Test]
     public function testBase(): void

@@ -29,7 +29,7 @@ use TomasChochola\Tooling\PhpCsFixerConfig\ConfigMaker;
  */
 #[CoversClass(ConfigMaker::class)]
 #[Small]
-final class ConfigFactoryTest extends TestCase
+class ConfigFactoryTest extends TestCase
 {
     #[DoesNotPerformAssertions]
     #[Test]
