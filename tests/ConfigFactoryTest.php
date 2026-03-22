@@ -35,6 +35,6 @@ final class ConfigFactoryTest extends TestCase
     #[Test]
     public function testMake(): void
     {
-        ConfigMaker::make($this->createStub(Finder::class), []);
+        ConfigMaker::make(self::createStub(Finder::class), []);
     }
 }

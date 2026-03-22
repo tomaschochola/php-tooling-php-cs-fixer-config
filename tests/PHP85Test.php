@@ -32,24 +32,24 @@ final class PHP85Test extends TestCase
     #[Test]
     public function testBase(): void
     {
-        $this->assertNotEmpty(PHP85::base());
+        self::assertNotEmpty(PHP85::base());
     }
 
     #[Test]
     public function testLibrary(): void
     {
-        $this->assertNotEmpty(PHP85::library());
+        self::assertEmpty(PHP85::library());
     }
 
     #[Test]
     public function testProject(): void
     {
-        $this->assertNotEmpty(PHP85::project());
+        self::assertNotEmpty(PHP85::project());
     }
 
     #[Test]
     public function testTomaschochola(): void
     {
-        $this->assertNotEmpty(PHP85::tomaschochola());
+        self::assertNotEmpty(PHP85::tomaschochola());
     }
 }

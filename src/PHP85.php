@@ -612,7 +612,10 @@ readonly class PHP85
             'php_unit_size_class' => true,
             'php_unit_strict' => true,
             'php_unit_test_annotation' => true,
-            'php_unit_test_case_static_method_calls' => true,
+            'php_unit_test_case_static_method_calls' => [
+                'call_type' => 'static',
+                'target' => 'newest',
+            ],
             'php_unit_test_class_requires_covers' => true,
             'phpdoc_add_missing_param_annotation' => false,
             'phpdoc_align' => [
