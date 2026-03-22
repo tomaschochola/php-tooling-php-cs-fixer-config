@@ -29,12 +29,12 @@ use TomasChochola\Tooling\PhpCsFixerConfig\ConfigMaker;
  */
 #[CoversClass(ConfigMaker::class)]
 #[Small]
-class ConfigFactoryTest extends TestCase
+final class ConfigFactoryTest extends TestCase
 {
     #[DoesNotPerformAssertions]
     #[Test]
     public function testMake(): void
     {
-        ConfigMaker::make(self::createStub(Finder::class), []);
+        ConfigMaker::make($this->createStub(Finder::class), []);
     }
 }

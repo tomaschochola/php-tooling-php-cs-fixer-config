@@ -17,7 +17,4 @@ use TomasChochola\Tooling\PhpCsFixerConfig\ConfigMaker;
 use TomasChochola\Tooling\PhpCsFixerConfig\FinderMaker;
 use TomasChochola\Tooling\PhpCsFixerConfig\PHP85;
 
-return ConfigMaker::make(FinderMaker::make()->in(__DIR__), \array_replace(
-    PHP85::base(),
-    PHP85::project(),
-));
+return ConfigMaker::make(FinderMaker::make()->in(__DIR__), \array_replace(PHP85::base(), PHP85::project()));

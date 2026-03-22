@@ -17,6 +17,196 @@ namespace TomasChochola\Tooling\PhpCsFixerConfig;
 
 /**
  * @no-named-arguments
+ *
+ * Configurable rules:
+ * align_multiline_comment
+ * array_syntax
+ * attribute_empty_parentheses
+ * binary_operator_spaces
+ * blank_line_before_statement
+ * blank_lines_before_namespace ------
+ * braces_position
+ * cast_spaces
+ * class_attributes_separation
+ * class_definition
+ * comment_to_phpdoc
+ * concat_space
+ * constant_case
+ * control_structure_continuation_position
+ * declare_equal_normalize
+ * declare_strict_types
+ * doctrine_annotation_array_assignment
+ * doctrine_annotation_braces
+ * doctrine_annotation_indentation
+ * doctrine_annotation_spaces
+ * echo_tag_syntax
+ * empty_loop_body
+ * empty_loop_condition
+ * error_suppression
+ * final_internal_class
+ * fopen_flags
+ * fully_qualified_strict_types
+ * function_declaration----
+ * function_to_constant
+ * general_attribute_remove
+ * general_phpdoc_annotation_remove
+ * general_phpdoc_tag_rename
+ * global_namespace_import
+ * group_import
+ * header_comment
+ * heredoc_closing_marker
+ * heredoc_indentation
+ * increment_style
+ * list_syntax
+ * method_argument_space
+ * modernize_strpos
+ * modifier_keywords
+ * multiline_whitespace_before_semicolons
+ * native_constant_invocation
+ * native_function_invocation
+ * new_expression_parentheses
+ * new_with_parentheses
+ * no_alias_functions
+ * no_alternative_syntax
+ * no_break_comment
+ * no_extra_blank_lines
+ * no_mixed_echo_print
+ * no_spaces_around_offset
+ * no_superfluous_phpdoc_tags
+ * no_trailing_comma_in_singleline
+ * no_unneeded_braces
+ * no_unneeded_control_parentheses
+ * no_unneeded_final_method
+ * no_useless_return
+ * no_useless_sprintf
+ * no_whitespace_before_comma_in_array
+ * no_whitespace_in_blank_line
+ * non_printable_character
+ * normalize_index_brace
+ * not_operator_with_space
+ * not_operator_with_successor_space
+ * nullable_type_declaration
+ * nullable_type_declaration_for_default_null_value
+ * numeric_literal_separator
+ * object_operator_without_whitespace
+ * octal_notation
+ * operator_linebreak
+ * ordered_attributes
+ * ordered_class_elements
+ * ordered_imports
+ * ordered_interfaces
+ * ordered_traits
+ * ordered_types
+ * php_unit_assert_new_names
+ * php_unit_attributes
+ * php_unit_construct
+ * php_unit_data_provider_method_order
+ * php_unit_data_provider_name
+ * php_unit_data_provider_return_type
+ * php_unit_data_provider_static
+ * php_unit_dedicate_assert
+ * php_unit_dedicate_assert_internal_type
+ * php_unit_expectation
+ * php_unit_fqcn_annotation
+ * php_unit_internal_class
+ * php_unit_method_casing
+ * php_unit_mock
+ * php_unit_mock_short_will_return
+ * php_unit_namespaced
+ * php_unit_no_expectation_annotation
+ * php_unit_set_up_tear_down_visibility
+ * php_unit_size_class
+ * php_unit_strict
+ * php_unit_test_annotation
+ * php_unit_test_case_static_method_calls
+ * php_unit_test_class_requires_covers
+ * phpdoc_add_missing_param_annotation
+ * phpdoc_align
+ * phpdoc_annotation_without_dot
+ * phpdoc_array_type
+ * phpdoc_indent
+ * phpdoc_inline_tag_normalizer
+ * phpdoc_line_span
+ * phpdoc_list_type
+ * phpdoc_no_access
+ * phpdoc_no_alias_tag
+ * phpdoc_no_empty_return
+ * phpdoc_no_package
+ * phpdoc_no_useless_inheritdoc
+ * phpdoc_order
+ * phpdoc_order_by_value
+ * phpdoc_param_order
+ * phpdoc_readonly_class_comment_to_keyword
+ * phpdoc_return_self_reference
+ * phpdoc_scalar
+ * phpdoc_separation
+ * phpdoc_single_line_var_spacing
+ * phpdoc_summary
+ * phpdoc_tag_casing
+ * phpdoc_tag_no_named_arguments
+ * phpdoc_tag_type
+ * phpdoc_to_comment
+ * phpdoc_trim
+ * phpdoc_trim_consecutive_blank_line_separation
+ * phpdoc_types
+ * phpdoc_types_no_duplicates
+ * phpdoc_types_order
+ * phpdoc_var_annotation_correct_order
+ * phpdoc_var_without_name
+ * pow_to_exponentiation
+ * protected_to_private
+ * psr_autoloading
+ * random_api_migration
+ * regular_callable_call
+ * return_assignment
+ * return_to_yield_from
+ * return_type_declaration
+ * self_accessor
+ * self_static_accessor
+ * semicolon_after_instruction
+ * set_type_to_cast
+ * short_scalar_cast
+ * simple_to_complex_string_variable
+ * simplified_if_return
+ * simplified_null_return
+ * single_blank_line_at_eof
+ * single_class_element_per_statement
+ * single_import_per_statement
+ * single_line_after_imports
+ * single_line_comment_spacing
+ * single_line_comment_style
+ * single_line_empty_body
+ * single_quote
+ * single_space_around_construct
+ * single_trait_insert_per_statement
+ * space_after_semicolon
+ * spaces_inside_parentheses
+ * standardize_increment
+ * standardize_not_equals
+ * statement_indentation
+ * static_lambda
+ * static_private_method
+ * strict_comparison
+ * strict_param
+ * string_implicit_backslashes
+ * string_length_to_empty
+ * string_line_ending
+ * switch_case_semicolon_to_colon
+ * switch_case_space
+ * switch_continue_to_break
+ * ternary_operator_spaces
+ * ternary_to_elvis_operator
+ * ternary_to_null_coalescing
+ * trailing_comma_in_multiline
+ * trim_array_spaces
+ * type_declaration_spaces
+ * types_spaces
+ * unary_operator_spaces
+ * use_arrow_functions
+ * void_return
+ * whitespace_after_comma_in_array
+ * yield_from_array_to_yields
+ * yoda_style
  */
 readonly class PHP85
 {
@@ -100,6 +290,10 @@ readonly class PHP85
             'declare_parentheses' => true,
             'declare_strict_types' => true,
             'dir_constant' => true,
+            'doctrine_annotation_array_assignment' => false,
+            'doctrine_annotation_braces' => false,
+            'doctrine_annotation_indentation' => false,
+            'doctrine_annotation_spaces' => false,
             'echo_tag_syntax' => [
                 'shorten_simple_statements_only' => false,
             ],
@@ -207,9 +401,12 @@ readonly class PHP85
             'mb_str_functions' => true,
             'method_argument_space' => [
                 'after_heredoc' => true,
+                'on_multiline' => 'ensure_single_line',
             ],
             'method_chaining_indentation' => true,
-            'modernize_strpos' => true,
+            'modernize_strpos' => [
+                'modernize_stripos' => true,
+            ],
             'modernize_types_casting' => true,
             'modifier_keywords' => true,
             'multiline_comment_opening_closing' => true,
@@ -226,7 +423,9 @@ readonly class PHP85
             'new_expression_parentheses' => [
                 'use_parentheses' => true,
             ],
-            'new_with_parentheses' => true,
+            'new_with_parentheses' => [
+                'anonymous_class' => true,
+            ],
             'no_alias_functions' => [
                 'sets' => [
                     '@all',
@@ -258,7 +457,6 @@ readonly class PHP85
                     'switch',
                     'throw',
                     'use',
-                    'use_trait',
                 ],
             ],
             'no_homoglyph_names' => true,
@@ -497,7 +695,7 @@ readonly class PHP85
             'phpdoc_single_line_var_spacing' => true,
             'phpdoc_summary' => true,
             'phpdoc_tag_casing' => true,
-            'phpdoc_tag_no_named_arguments' => false,
+            'phpdoc_tag_no_named_arguments' => true,
             'phpdoc_tag_type' => [
                 'tags' => [
                     'inheritDoc' => 'inline',
@@ -597,6 +795,16 @@ readonly class PHP85
                 'identical' => false,
                 'less_and_greater' => false,
             ],
+            'attribute_block_no_spaces' => true,
+            'modern_serialization_methods' => true,
+            'no_redundant_readonly_property' => false,
+            'stringable_for_to_string' => true,
+            'single_line_throw' => true,
+            'phpdoc_types_no_duplicates' => true,
+            'doctrine_annotation_array_assignment' => false,
+            'doctrine_annotation_braces' => false,
+            'doctrine_annotation_indentation' => false,
+            'doctrine_annotation_spaces' => false,
         ];
     }
 
@@ -605,9 +813,7 @@ readonly class PHP85
      */
     public static function library(): array
     {
-        return [
-            'phpdoc_tag_no_named_arguments' => true,
-        ];
+        return [];
     }
 
     /**

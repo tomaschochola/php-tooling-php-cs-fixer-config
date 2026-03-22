@@ -27,29 +27,29 @@ use TomasChochola\Tooling\PhpCsFixerConfig\PHP85;
  */
 #[CoversClass(PHP85::class)]
 #[Small]
-class PHP85Test extends TestCase
+final class PHP85Test extends TestCase
 {
     #[Test]
     public function testBase(): void
     {
-        self::assertNotEmpty(PHP85::base());
+        $this->assertNotEmpty(PHP85::base());
     }
 
     #[Test]
     public function testLibrary(): void
     {
-        self::assertNotEmpty(PHP85::library());
+        $this->assertNotEmpty(PHP85::library());
     }
 
     #[Test]
     public function testProject(): void
     {
-        self::assertNotEmpty(PHP85::project());
+        $this->assertNotEmpty(PHP85::project());
     }
 
     #[Test]
     public function testTomaschochola(): void
     {
-        self::assertNotEmpty(PHP85::tomaschochola());
+        $this->assertNotEmpty(PHP85::tomaschochola());
     }
 }
