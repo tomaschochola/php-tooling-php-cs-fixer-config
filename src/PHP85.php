@@ -18,13 +18,12 @@ namespace TomasChochola\Tooling\PhpCsFixerConfig;
 /**
  * @no-named-arguments
  *
- * Configurable rules:
  * align_multiline_comment
  * array_syntax
  * attribute_empty_parentheses
  * binary_operator_spaces
  * blank_line_before_statement
- * blank_lines_before_namespace ------
+ * blank_lines_before_namespace
  * braces_position
  * cast_spaces
  * class_attributes_separation
@@ -46,7 +45,7 @@ namespace TomasChochola\Tooling\PhpCsFixerConfig;
  * final_internal_class
  * fopen_flags
  * fully_qualified_strict_types
- * function_declaration----
+ * function_declaration
  * function_to_constant
  * general_attribute_remove
  * general_phpdoc_annotation_remove
@@ -801,10 +800,6 @@ readonly class PHP85
             'stringable_for_to_string' => true,
             'single_line_throw' => true,
             'phpdoc_types_no_duplicates' => true,
-            'doctrine_annotation_array_assignment' => false,
-            'doctrine_annotation_braces' => false,
-            'doctrine_annotation_indentation' => false,
-            'doctrine_annotation_spaces' => false,
         ];
     }
 
