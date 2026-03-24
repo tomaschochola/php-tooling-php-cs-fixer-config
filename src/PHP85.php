@@ -76,19 +76,11 @@ namespace TomasChochola\Tooling\PhpCsFixerConfig;
  * no_unneeded_braces
  * no_unneeded_control_parentheses
  * no_unneeded_final_method
- * no_useless_return
- * no_useless_sprintf
  * no_whitespace_before_comma_in_array
- * no_whitespace_in_blank_line
  * non_printable_character
- * normalize_index_brace
- * not_operator_with_space
- * not_operator_with_successor_space
  * nullable_type_declaration
  * nullable_type_declaration_for_default_null_value
  * numeric_literal_separator
- * object_operator_without_whitespace
- * octal_notation
  * operator_linebreak
  * ordered_attributes
  * ordered_class_elements
@@ -96,116 +88,59 @@ namespace TomasChochola\Tooling\PhpCsFixerConfig;
  * ordered_interfaces
  * ordered_traits
  * ordered_types
- * php_unit_assert_new_names
  * php_unit_attributes
  * php_unit_construct
  * php_unit_data_provider_method_order
  * php_unit_data_provider_name
- * php_unit_data_provider_return_type
  * php_unit_data_provider_static
  * php_unit_dedicate_assert
  * php_unit_dedicate_assert_internal_type
  * php_unit_expectation
- * php_unit_fqcn_annotation
  * php_unit_internal_class
  * php_unit_method_casing
  * php_unit_mock
- * php_unit_mock_short_will_return
  * php_unit_namespaced
  * php_unit_no_expectation_annotation
- * php_unit_set_up_tear_down_visibility
  * php_unit_size_class
  * php_unit_strict
  * php_unit_test_annotation
  * php_unit_test_case_static_method_calls
- * php_unit_test_class_requires_covers
  * phpdoc_add_missing_param_annotation
  * phpdoc_align
- * phpdoc_annotation_without_dot
- * phpdoc_array_type
- * phpdoc_indent
  * phpdoc_inline_tag_normalizer
  * phpdoc_line_span
- * phpdoc_list_type
- * phpdoc_no_access
  * phpdoc_no_alias_tag
- * phpdoc_no_empty_return
- * phpdoc_no_package
- * phpdoc_no_useless_inheritdoc
  * phpdoc_order
  * phpdoc_order_by_value
- * phpdoc_param_order
- * phpdoc_readonly_class_comment_to_keyword
  * phpdoc_return_self_reference
  * phpdoc_scalar
  * phpdoc_separation
- * phpdoc_single_line_var_spacing
- * phpdoc_summary
  * phpdoc_tag_casing
  * phpdoc_tag_no_named_arguments
  * phpdoc_tag_type
  * phpdoc_to_comment
- * phpdoc_trim
- * phpdoc_trim_consecutive_blank_line_separation
  * phpdoc_types
- * phpdoc_types_no_duplicates
  * phpdoc_types_order
- * phpdoc_var_annotation_correct_order
- * phpdoc_var_without_name
- * pow_to_exponentiation
- * protected_to_private
  * psr_autoloading
  * random_api_migration
- * regular_callable_call
- * return_assignment
- * return_to_yield_from
  * return_type_declaration
- * self_accessor
- * self_static_accessor
- * semicolon_after_instruction
- * set_type_to_cast
- * short_scalar_cast
- * simple_to_complex_string_variable
- * simplified_if_return
- * simplified_null_return
- * single_blank_line_at_eof
  * single_class_element_per_statement
  * single_import_per_statement
- * single_line_after_imports
- * single_line_comment_spacing
  * single_line_comment_style
- * single_line_empty_body
  * single_quote
  * single_space_around_construct
- * single_trait_insert_per_statement
  * space_after_semicolon
  * spaces_inside_parentheses
- * standardize_increment
- * standardize_not_equals
  * statement_indentation
- * static_lambda
- * static_private_method
- * strict_comparison
- * strict_param
  * string_implicit_backslashes
- * string_length_to_empty
- * string_line_ending
- * switch_case_semicolon_to_colon
- * switch_case_space
- * switch_continue_to_break
- * ternary_operator_spaces
- * ternary_to_elvis_operator
- * ternary_to_null_coalescing
  * trailing_comma_in_multiline
- * trim_array_spaces
  * type_declaration_spaces
  * types_spaces
  * unary_operator_spaces
- * use_arrow_functions
  * void_return
  * whitespace_after_comma_in_array
- * yield_from_array_to_yields
  * yoda_style
+ * no_useless_concat_operator
  */
 readonly class PHP85
 {
@@ -269,6 +204,7 @@ readonly class PHP85
             ],
             'class_definition' => [
                 'single_line' => true,
+                'space_before_parenthesis' => true,
             ],
             'class_reference_name_casing' => true,
             'clean_namespace' => true,
@@ -310,7 +246,9 @@ readonly class PHP85
             'explicit_indirect_variable' => true,
             'explicit_string_variable' => true,
             'final_class' => false,
-            'final_internal_class' => true,
+            'final_internal_class' => [
+                'exclude' => [],
+            ],
             'final_public_method_for_abstract_class' => true,
             'fopen_flag_order' => true,
             'fopen_flags' => [
@@ -319,11 +257,8 @@ readonly class PHP85
             'full_opening_tag' => true,
             'fully_qualified_strict_types' => [
                 'import_symbols' => true,
-                'leading_backslash_in_global_namespace' => false,
             ],
-            'function_declaration' => [
-                'closure_fn_spacing' => 'none',
-            ],
+            'function_declaration' => true,
             'function_to_constant' => true,
             'general_attribute_remove' => false,
             'general_phpdoc_annotation_remove' => [
@@ -399,13 +334,10 @@ readonly class PHP85
             'magic_method_casing' => true,
             'mb_str_functions' => true,
             'method_argument_space' => [
-                'after_heredoc' => true,
                 'on_multiline' => 'ensure_single_line',
             ],
             'method_chaining_indentation' => true,
-            'modernize_strpos' => [
-                'modernize_stripos' => true,
-            ],
+            'modernize_strpos' => true,
             'modernize_types_casting' => true,
             'modifier_keywords' => true,
             'multiline_comment_opening_closing' => true,
@@ -428,6 +360,22 @@ readonly class PHP85
             'no_alias_functions' => [
                 'sets' => [
                     '@all',
+                    '@exif',
+                    '@ftp',
+                    '@IMAP',
+                    '@internal',
+                    '@ldap',
+                    '@mbreg',
+                    '@mysqli',
+                    '@oci',
+                    '@odbc',
+                    '@openssl',
+                    '@pcntl',
+                    '@pg',
+                    '@posix',
+                    '@snmp',
+                    '@sodium',
+                    '@time'
                 ],
             ],
             'no_alias_language_construct_call' => true,
@@ -474,6 +422,7 @@ readonly class PHP85
             'no_superfluous_elseif' => true,
             'no_superfluous_phpdoc_tags' => [
                 'remove_inheritdoc' => true,
+                'allow_hidden_params' => false,
             ],
             'no_trailing_comma_in_singleline' => true,
             'no_trailing_whitespace' => true,
@@ -510,9 +459,7 @@ readonly class PHP85
             'no_useless_printf' => true,
             'no_useless_return' => true,
             'no_useless_sprintf' => true,
-            'no_whitespace_before_comma_in_array' => [
-                'after_heredoc' => true,
-            ],
+            'no_whitespace_before_comma_in_array' => true,
             'no_whitespace_in_blank_line' => true,
             'non_printable_character' => true,
             'normalize_index_brace' => true,
@@ -581,7 +528,6 @@ readonly class PHP85
             ],
             'ordered_types' => [
                 'case_sensitive' => true,
-                'null_adjustment' => 'always_last',
             ],
             'php_unit_assert_new_names' => true,
             'php_unit_attributes' => true,
@@ -614,7 +560,6 @@ readonly class PHP85
             'php_unit_test_annotation' => true,
             'php_unit_test_case_static_method_calls' => [
                 'call_type' => 'static',
-                'target' => 'newest',
             ],
             'php_unit_test_class_requires_covers' => true,
             'phpdoc_add_missing_param_annotation' => false,
@@ -703,9 +648,7 @@ readonly class PHP85
                     'inheritDoc' => 'inline',
                 ],
             ],
-            'phpdoc_to_comment' => [
-                'allow_before_return_statement' => true,
-            ],
+            'phpdoc_to_comment' => true,
             'phpdoc_trim' => true,
             'phpdoc_trim_consecutive_blank_line_separation' => true,
             'phpdoc_types' => true,
@@ -718,14 +661,7 @@ readonly class PHP85
             'pow_to_exponentiation' => true,
             'protected_to_private' => true,
             'psr_autoloading' => true,
-            'random_api_migration' => [
-                'replacements' => [
-                    'mt_rand' => 'random_int',
-                    'rand' => 'random_int',
-                    'getrandmax' => 'mt_getrandmax',
-                    'srand' => 'mt_srand',
-                ],
-            ],
+            'random_api_migration' => true,
             'regular_callable_call' => true,
             'return_assignment' => true,
             'return_to_yield_from' => true,
@@ -773,9 +709,9 @@ readonly class PHP85
             'ternary_to_elvis_operator' => true,
             'ternary_to_null_coalescing' => true,
             'trailing_comma_in_multiline' => [
-                'after_heredoc' => true,
                 'elements' => [
                     'arguments',
+                    'array_destructuring',
                     'arrays',
                     'match',
                     'parameters',
