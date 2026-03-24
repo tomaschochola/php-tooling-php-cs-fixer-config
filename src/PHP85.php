@@ -375,7 +375,7 @@ readonly class PHP85
                     '@posix',
                     '@snmp',
                     '@sodium',
-                    '@time'
+                    '@time',
                 ],
             ],
             'no_alias_language_construct_call' => true,
