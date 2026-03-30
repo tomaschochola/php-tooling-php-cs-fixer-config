@@ -13,7 +13,7 @@
 
 declare(strict_types=1);
 
-namespace TomasChochola\Tooling\PhpCsFixerConfig;
+namespace TomasChochola\PhpCsFixerStack;
 
 use PhpCsFixer\Config;
 use PhpCsFixer\ConfigInterface;

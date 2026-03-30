@@ -19,7 +19,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\Test;
-use TomasChochola\Tooling\PhpCsFixerConfig\FinderMaker;
+use TomasChochola\PhpCsFixerStack\FinderMaker;
 
 /**
  * @internal

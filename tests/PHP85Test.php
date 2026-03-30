@@ -18,7 +18,7 @@ namespace Tests;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\Test;
-use TomasChochola\Tooling\PhpCsFixerConfig\PHP85;
+use TomasChochola\PhpCsFixerStack\PHP85;
 
 /**
  * @internal

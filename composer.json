@@ -9,7 +9,7 @@
   ],
   "autoload": {
     "psr-4": {
-      "TomasChochola\\Tooling\\PhpCsFixerConfig\\": "./src"
+      "TomasChochola\\PhpCsFixerStack\\": "./src"
     }
   },
   "autoload-dev": {
@@ -26,31 +26,31 @@
     "process-timeout": 0,
     "sort-packages": true
   },
-  "description": "tomaschochola/php-tooling-php-cs-fixer-config",
+  "description": "tomaschochola/php-cs-fixer-stack",
   "funding": [
     {
       "type": "github",
       "url": "https://github.com/sponsors/tomaschochola"
     }
   ],
-  "homepage": "https://github.com/tomaschochola/php-tooling-php-cs-fixer-config",
+  "homepage": "https://github.com/tomaschochola/php-cs-fixer-stack",
   "keywords": [
     "tomaschochola",
     "TomasChochola",
     "Tomas Chochola",
     "Tomáš Chochola",
-    "php-tooling-php-cs-fixer-config"
+    "php-cs-fixer-stack"
   ],
   "license": "CC-BY-ND-4.0",
   "minimum-stability": "dev",
-  "name": "tomaschochola/php-tooling-php-cs-fixer-config",
+  "name": "tomaschochola/php-cs-fixer-stack",
   "prefer-stable": true,
   "readme": "./README.md",
   "repositories": [
     {
       "no-api": true,
       "type": "git",
-      "url": "https://github.com/tomaschochola/php-tooling-phpstan-config.git"
+      "url": "https://github.com/tomaschochola/phpstan-stack.git"
     }
   ],
   "require": {
@@ -64,13 +64,13 @@
     "ext-zip": "*",
     "phpunit/phpunit": "^12.5",
     "roave/security-advisories": "dev-latest",
-    "tomaschochola/php-tooling-phpstan-config": "^1.0@dev"
+    "tomaschochola/phpstan-stack": "^1.0@dev"
   },
   "support": {
-    "docs": "https://github.com/tomaschochola/php-tooling-php-cs-fixer-config",
+    "docs": "https://github.com/tomaschochola/php-cs-fixer-stack",
     "email": "tomaschochola@tomaschochola.cz",
-    "issues": "https://github.com/tomaschochola/php-tooling-php-cs-fixer-config/issues",
-    "source": "https://github.com/tomaschochola/php-tooling-php-cs-fixer-config.git"
+    "issues": "https://github.com/tomaschochola/php-cs-fixer-stack/issues",
+    "source": "https://github.com/tomaschochola/php-cs-fixer-stack.git"
   },
   "type": "library"
 }
