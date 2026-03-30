@@ -6,7 +6,7 @@
   },
   "bugs": {
     "email": "tomaschochola@tomaschochola.cz",
-    "url": "https://github.com/tomaschochola/php-cs-fixer-stack/issues"
+    "url": "https://github.com/tomaschochola/tooling-php-cs-fixer/issues"
   },
   "contributors": [
     {
@@ -15,26 +15,26 @@
       "url": "https://github.com/tomaschochola"
     }
   ],
-  "description": "@tomaschochola/php-cs-fixer-stack",
+  "description": "@tomaschochola/tooling-php-cs-fixer",
   "devDependencies": {
-    "@tomaschochola/eslint-stack": "github:tomaschochola/eslint-stack#1.x",
-    "@tomaschochola/prettier-stack": "github:tomaschochola/prettier-stack#1.x"
+    "@tomaschochola/tooling-eslint": "github:tomaschochola/tooling-eslint#1.x",
+    "@tomaschochola/tooling-prettier": "github:tomaschochola/tooling-prettier#1.x"
   },
   "funding": {
     "type": "github",
     "url": "https://github.com/sponsors/tomaschochola"
   },
-  "homepage": "https://github.com/tomaschochola/php-cs-fixer-stack",
+  "homepage": "https://github.com/tomaschochola/tooling-php-cs-fixer",
   "keywords": [
     "tomaschochola",
     "TomasChochola",
     "Tomas Chochola",
     "Tomáš Chochola",
-    "php-cs-fixer-stack"
+    "tooling-php-cs-fixer"
   ],
   "license": "CC-BY-ND-4.0",
-  "name": "@tomaschochola/php-cs-fixer-stack",
-  "repository": "github:tomaschochola/php-cs-fixer-stack",
+  "name": "@tomaschochola/tooling-php-cs-fixer",
+  "repository": "github:tomaschochola/tooling-php-cs-fixer",
   "sideEffects": false,
   "type": "module"
 }

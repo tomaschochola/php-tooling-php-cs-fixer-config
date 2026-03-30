@@ -13,7 +13,7 @@
 
 declare(strict_types=1);
 
-namespace TomasChochola\PhpCsFixerStack;
+namespace TomasChochola\Tooling\PhpCsFixer;
 
 /**
  * @no-named-arguments

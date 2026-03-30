@@ -9,7 +9,7 @@
   ],
   "autoload": {
     "psr-4": {
-      "TomasChochola\\PhpCsFixerStack\\": "./src"
+      "TomasChochola\\Tooling\\PhpCsFixer\\": "./src"
     }
   },
   "autoload-dev": {
@@ -26,31 +26,31 @@
     "process-timeout": 0,
     "sort-packages": true
   },
-  "description": "tomaschochola/php-cs-fixer-stack",
+  "description": "tomaschochola/tooling-php-cs-fixer",
   "funding": [
     {
       "type": "github",
       "url": "https://github.com/sponsors/tomaschochola"
     }
   ],
-  "homepage": "https://github.com/tomaschochola/php-cs-fixer-stack",
+  "homepage": "https://github.com/tomaschochola/tooling-php-cs-fixer",
   "keywords": [
     "tomaschochola",
     "TomasChochola",
     "Tomas Chochola",
     "Tomáš Chochola",
-    "php-cs-fixer-stack"
+    "tooling-php-cs-fixer"
   ],
   "license": "CC-BY-ND-4.0",
   "minimum-stability": "dev",
-  "name": "tomaschochola/php-cs-fixer-stack",
+  "name": "tomaschochola/tooling-php-cs-fixer",
   "prefer-stable": true,
   "readme": "./README.md",
   "repositories": [
     {
       "no-api": true,
       "type": "git",
-      "url": "https://github.com/tomaschochola/phpstan-stack.git"
+      "url": "https://github.com/tomaschochola/tooling-phpstan.git"
     }
   ],
   "require": {
@@ -64,13 +64,13 @@
     "ext-zip": "*",
     "phpunit/phpunit": "^12.5",
     "roave/security-advisories": "dev-latest",
-    "tomaschochola/phpstan-stack": "^1.0@dev"
+    "tomaschochola/tooling-phpstan": "^1.0@dev"
   },
   "support": {
-    "docs": "https://github.com/tomaschochola/php-cs-fixer-stack",
+    "docs": "https://github.com/tomaschochola/tooling-php-cs-fixer",
     "email": "tomaschochola@tomaschochola.cz",
-    "issues": "https://github.com/tomaschochola/php-cs-fixer-stack/issues",
-    "source": "https://github.com/tomaschochola/php-cs-fixer-stack.git"
+    "issues": "https://github.com/tomaschochola/tooling-php-cs-fixer/issues",
+    "source": "https://github.com/tomaschochola/tooling-php-cs-fixer.git"
   },
   "type": "library"
 }

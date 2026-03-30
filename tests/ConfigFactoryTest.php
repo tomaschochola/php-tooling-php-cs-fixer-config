@@ -20,7 +20,7 @@ use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\Test;
 use PhpCsFixer\Finder;
-use TomasChochola\PhpCsFixerStack\ConfigMaker;
+use TomasChochola\Tooling\PhpCsFixer\ConfigMaker;
 
 /**
  * @internal
