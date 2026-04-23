@@ -738,7 +738,7 @@ readonly class PHP85
             'no_redundant_readonly_property' => false,
             'stringable_for_to_string' => true,
             'single_line_throw' => true,
-            'phpdoc_types_no_duplicates' => true,
+            'phpdoc_no_duplicate_types' => true,
         ];
     }
 
