@@ -19,14 +19,14 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\Test;
-use TomasChochola\Tooling\PhpCsFixer\FinderMaker;
+use TomasChochola\Tooling\PhpCsFixer\FinderFactory;
 
 /**
  * @internal
  *
  * @no-named-arguments
  */
-#[CoversClass(FinderMaker::class)]
+#[CoversClass(FinderFactory::class)]
 #[Small]
 final class FinderFactoryTest extends TestCase
 {
@@ -34,6 +34,6 @@ final class FinderFactoryTest extends TestCase
     #[Test]
     public function testMake(): void
     {
-        FinderMaker::make();
+        FinderFactory::make();
     }
 }
