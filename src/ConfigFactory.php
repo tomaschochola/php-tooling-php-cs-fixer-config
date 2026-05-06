@@ -28,7 +28,7 @@ readonly class ConfigFactory
     /**
      * @param array<string, array<string, mixed>|bool> $rules
      */
-    public static function make(Finder $finder, array $rules): ConfigInterface
+    public static function create(Finder $finder, array $rules): ConfigInterface
     {
         $config = new Config();
 

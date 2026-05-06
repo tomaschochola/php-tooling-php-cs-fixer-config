@@ -34,6 +34,6 @@ final class FinderFactoryTest extends TestCase
     #[Test]
     public function testMake(): void
     {
-        FinderFactory::make();
+        FinderFactory::create();
     }
 }

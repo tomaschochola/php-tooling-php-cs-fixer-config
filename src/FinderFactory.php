@@ -22,7 +22,7 @@ use PhpCsFixer\Finder;
  */
 readonly class FinderFactory
 {
-    public static function make(): Finder
+    public static function create(): Finder
     {
         return (new Finder())
             ->ignoreDotFiles(false)

@@ -147,7 +147,7 @@ readonly class PHP85
     /**
      * @return array<string, array<string, mixed>|bool>
      */
-    public static function base(): array
+    public static function strictRules(): array
     {
         return [
             'align_multiline_comment' => [
@@ -745,41 +745,10 @@ readonly class PHP85
     /**
      * @return array<string, array<string, mixed>|bool>
      */
-    public static function library(): array
-    {
-        return [];
-    }
-
-    /**
-     * @return array<string, array<string, mixed>|bool>
-     */
-    public static function project(): array
+    public static function projectRuleOverrides(): array
     {
         return [
             'final_class' => true,
-        ];
-    }
-
-    /**
-     * @return array<string, array<string, mixed>|bool>
-     */
-    public static function tomaschochola(): array
-    {
-        return [
-            'header_comment' => [
-                'comment_type' => 'PHPDoc',
-                'header' => <<<'EOF'
-                    @author Tomáš Chochola <tomaschochola@tomaschochola.cz>
-                    @copyright © 2026 Tomáš Chochola <tomaschochola@tomaschochola.cz>
-
-                    @license CC-BY-ND-4.0
-
-                    @see {@link https://creativecommons.org/licenses/by-nd/4.0/} License
-                    @see {@link https://github.com/tomaschochola} GitHub Profile
-                    @see {@link https://github.com/sponsors/tomaschochola} GitHub Sponsors
-                    EOF,
-                'location' => 'after_open',
-            ],
         ];
     }
 }
