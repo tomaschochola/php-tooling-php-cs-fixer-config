@@ -28,7 +28,7 @@ use TomasChochola\Tooling\PhpCsFixer\FinderFactory;
  */
 #[CoversClass(FinderFactory::class)]
 #[Small]
-final class FinderFactoryTest extends TestCase
+class FinderFactoryTest extends TestCase
 {
     #[DoesNotPerformAssertions]
     #[Test]

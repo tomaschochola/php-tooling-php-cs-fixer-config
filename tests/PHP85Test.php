@@ -27,7 +27,7 @@ use TomasChochola\Tooling\PhpCsFixer\PHP85;
  */
 #[CoversClass(PHP85::class)]
 #[Small]
-final class PHP85Test extends TestCase
+class PHP85Test extends TestCase
 {
     #[Test]
     public function testStrictRules(): void
@@ -36,8 +36,8 @@ final class PHP85Test extends TestCase
     }
 
     #[Test]
-    public function testProjectRuleOverrides(): void
+    public function testTomasChocholaFileHeaderRules(): void
     {
-        self::assertNotEmpty(PHP85::projectRuleOverrides());
+        self::assertNotEmpty(PHP85::tomasChocholaFileHeaderRules());
     }
 }
