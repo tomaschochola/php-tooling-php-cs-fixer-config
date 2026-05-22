@@ -18,6 +18,7 @@ namespace Tests;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\Test;
+use TomasChochola\Tooling\PhpCsFixer\Fixer\SiblingStatementSpacingFixer;
 use TomasChochola\Tooling\PhpCsFixer\PHP85;
 
 /**
@@ -26,16 +27,19 @@ use TomasChochola\Tooling\PhpCsFixer\PHP85;
  * @no-named-arguments
  */
 #[CoversClass(PHP85::class)]
-#[Small]
+#[Small()]
 class PHP85Test extends TestCase
 {
-    #[Test]
+    #[Test()]
     public function testStrictRules(): void
     {
-        self::assertNotEmpty(PHP85::strictRules());
+        $rules = PHP85::strictRules();
+
+        self::assertNotEmpty($rules);
+        self::assertTrue($rules[SiblingStatementSpacingFixer::NAME] ?? null);
     }
 
-    #[Test]
+    #[Test()]
     public function testTomasChocholaFileHeaderRules(): void
     {
         self::assertNotEmpty(PHP85::tomasChocholaFileHeaderRules());

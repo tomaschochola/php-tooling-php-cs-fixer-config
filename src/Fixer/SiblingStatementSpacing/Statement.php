@@ -13,25 +13,21 @@
 
 declare(strict_types=1);
 
-namespace Tests;
-
-use PHPUnit\Framework\Attributes\CoversNothing;
-use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
-use PHPUnit\Framework\Attributes\Small;
-use PHPUnit\Framework\Attributes\Test;
+namespace TomasChochola\Tooling\PhpCsFixer\Fixer\SiblingStatementSpacing;
 
 /**
- * @internal
- *
  * @no-named-arguments
  */
-#[CoversNothing()]
-#[Small()]
-class StubTest extends TestCase
+final readonly class Statement
 {
-    #[DoesNotPerformAssertions()]
-    #[Test()]
-    public function test(): void
-    {
+    public function __construct(
+        public int $visualStart,
+        public int $coreStart,
+        public int $coreEnd,
+        public int $visualEnd,
+        public string $group,
+        public bool $multiline,
+        public bool $hasLeadingComment,
+    ) {
     }
 }

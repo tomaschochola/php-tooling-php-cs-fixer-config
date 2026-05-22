@@ -19,6 +19,7 @@ use PhpCsFixer\Config;
 use PhpCsFixer\ConfigInterface;
 use PhpCsFixer\Finder;
 use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
+use TomasChochola\Tooling\PhpCsFixer\Fixer\SiblingStatementSpacingFixer;
 
 /**
  * @no-named-arguments
@@ -31,6 +32,10 @@ readonly class ConfigFactory
     public static function create(Finder $finder, array $rules): ConfigInterface
     {
         $config = new Config();
+
+        $config->registerCustomFixers([
+            new SiblingStatementSpacingFixer(),
+        ]);
 
         $config->setFinder($finder);
         $config->setLineEnding("\n");

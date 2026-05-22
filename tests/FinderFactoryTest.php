@@ -27,11 +27,11 @@ use TomasChochola\Tooling\PhpCsFixer\FinderFactory;
  * @no-named-arguments
  */
 #[CoversClass(FinderFactory::class)]
-#[Small]
+#[Small()]
 class FinderFactoryTest extends TestCase
 {
-    #[DoesNotPerformAssertions]
-    #[Test]
+    #[DoesNotPerformAssertions()]
+    #[Test()]
     public function testMake(): void
     {
         FinderFactory::create();

@@ -15,6 +15,8 @@ declare(strict_types=1);
 
 namespace TomasChochola\Tooling\PhpCsFixer;
 
+use TomasChochola\Tooling\PhpCsFixer\Fixer\SiblingStatementSpacingFixer;
+
 /**
  * @no-named-arguments
  */
@@ -72,6 +74,7 @@ readonly class PHP85
             ],
             'blank_line_between_import_groups' => true,
             'blank_lines_before_namespace' => true,
+            SiblingStatementSpacingFixer::NAME => true,
             'braces_position' => [
                 'allow_single_line_anonymous_functions' => false,
                 'allow_single_line_empty_anonymous_classes' => false,
@@ -490,9 +493,7 @@ readonly class PHP85
                 'group' => 'small',
             ],
             'php_unit_strict' => true,
-            'php_unit_test_annotation' => [
-                'style' => 'annotation',
-            ],
+            'php_unit_test_annotation' => false,
             'php_unit_test_case_static_method_calls' => [
                 'call_type' => 'self',
                 'target' => 'newest',
