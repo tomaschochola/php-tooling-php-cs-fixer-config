@@ -39,14 +39,21 @@ use function preg_replace;
 use function str_contains;
 use function usort;
 
+use const T_ABSTRACT;
+use const T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG;
+use const T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG;
 use const T_AND_EQUAL;
+use const T_ARRAY;
+use const T_ATTRIBUTE;
 use const T_BREAK;
 use const T_CASE;
 use const T_CATCH;
 use const T_CLASS;
+use const T_CLONE;
 use const T_CLOSE_TAG;
 use const T_COALESCE_EQUAL;
 use const T_CONCAT_EQUAL;
+use const T_CONST;
 use const T_CONTINUE;
 use const T_DEC;
 use const T_DECLARE;
@@ -57,18 +64,25 @@ use const T_DOUBLE_COLON;
 use const T_ECHO;
 use const T_ELSE;
 use const T_ELSEIF;
+use const T_EMPTY;
 use const T_ENUM;
+use const T_EVAL;
 use const T_EXIT;
+use const T_FINAL;
 use const T_FINALLY;
+use const T_FN;
 use const T_FOR;
 use const T_FOREACH;
 use const T_FUNCTION;
+use const T_GLOBAL;
 use const T_GOTO;
 use const T_IF;
 use const T_INC;
 use const T_INCLUDE;
 use const T_INCLUDE_ONCE;
 use const T_INTERFACE;
+use const T_ISSET;
+use const T_LIST;
 use const T_MATCH;
 use const T_MINUS_EQUAL;
 use const T_MOD_EQUAL;
@@ -80,11 +94,14 @@ use const T_OR_EQUAL;
 use const T_PLUS_EQUAL;
 use const T_POW_EQUAL;
 use const T_PRINT;
+use const T_READONLY;
 use const T_REQUIRE;
 use const T_REQUIRE_ONCE;
 use const T_RETURN;
 use const T_SL_EQUAL;
 use const T_SR_EQUAL;
+use const T_STATIC;
+use const T_STRING;
 use const T_SWITCH;
 use const T_THROW;
 use const T_TRAIT;
@@ -100,9 +117,11 @@ use const T_YIELD_FROM;
 /**
  * @phpstan-type _InputConfiguration array{
  *     separate_single_line_groups?: bool,
+ *     separate_comment_led_statements?: bool,
  * }
  * @phpstan-type _ComputedConfiguration array{
  *     separate_single_line_groups: bool,
+ *     separate_comment_led_statements: bool,
  * }
  *
  * @implements ConfigurableFixerInterface<_InputConfiguration, _ComputedConfiguration>
@@ -136,12 +155,25 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
     /**
      * @var list<int>
      */
+    private const CALL_LIKE_CONSTRUCT_TOKENS = [
+        T_ARRAY,
+        T_EMPTY,
+        T_EVAL,
+        T_ISSET,
+        T_LIST,
+        T_UNSET,
+    ];
+
+    /**
+     * @var list<int>
+     */
     private const CONTROL_TOKENS = [
         T_DECLARE,
         T_DO,
         T_FOR,
         T_FOREACH,
         T_IF,
+        T_MATCH,
         T_SWITCH,
         T_TRY,
         T_WHILE,
@@ -150,8 +182,18 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
     /**
      * @var list<int>
      */
+    private const DECLARATION_MODIFIER_TOKENS = [
+        T_ABSTRACT,
+        T_FINAL,
+        T_READONLY,
+    ];
+
+    /**
+     * @var list<int>
+     */
     private const DECLARATION_TOKENS = [
         T_CLASS,
+        T_CONST,
         T_FUNCTION,
         T_INTERFACE,
         T_TRAIT,
@@ -160,6 +202,8 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
 
     private const GROUP_ASSIGNMENT = 'assignment';
 
+    private const GROUP_CLOSURE = 'closure';
+
     private const GROUP_CONTROL = 'control';
 
     private const GROUP_DECLARATION = 'declaration';
@@ -167,6 +211,10 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
     private const GROUP_FUNCTION_CALL = 'function_call';
 
     private const GROUP_INCLUDE = 'include';
+
+    private const GROUP_LABEL = 'label';
+
+    private const GROUP_MUTATION = 'mutation';
 
     private const GROUP_OBJECT_CREATION = 'object_creation';
 
@@ -179,6 +227,8 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
     private const GROUP_TERMINAL = 'terminal';
 
     private const GROUP_THIS_METHOD_CALL = 'this_method_call';
+
+    private const GROUP_VARIABLE_DECLARATION = 'variable_declaration';
 
     /**
      * @var list<int>
@@ -238,7 +288,6 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
          * @var _ComputedConfiguration $computedConfiguration
          */
         $computedConfiguration = $this->getConfigurationDefinition()->resolve($configuration);
-
         $this->configuration = $computedConfiguration;
     }
 
@@ -372,16 +421,21 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
     {
         return $statementStart->isGivenKind([
             T_CATCH,
+            T_CLASS,
             T_DECLARE,
             T_DO,
             T_ELSE,
             T_ELSEIF,
+            T_ENUM,
             T_FINALLY,
             T_FOR,
             T_FOREACH,
             T_FUNCTION,
             T_IF,
+            T_INTERFACE,
+            T_NAMESPACE,
             T_SWITCH,
+            T_TRAIT,
             T_TRY,
             T_WHILE,
         ]);
@@ -389,7 +443,8 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
 
     private static function classifyStatement(Tokens $tokens, int $start, int $end): string
     {
-        $first = $tokens[$start];
+        $head = self::findStatementHead($tokens, $start, $end);
+        $first = $tokens[$head];
 
         if ($first->isGivenKind(self::TERMINAL_TOKENS)) {
             return self::GROUP_TERMINAL;
@@ -407,12 +462,32 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
             return self::GROUP_OUTPUT;
         }
 
+        if (self::isLabelStatement($tokens, $head, $end)) {
+            return self::GROUP_LABEL;
+        }
+
+        if ($first->isGivenKind(T_FN) || ($first->isGivenKind(T_FUNCTION) && !self::isNamedFunctionDeclaration($tokens, $head))) {
+            return self::GROUP_CLOSURE;
+        }
+
         if ($first->isGivenKind(self::DECLARATION_TOKENS)) {
             return self::GROUP_DECLARATION;
         }
 
-        if (self::hasTopLevelAssignmentOrMutation($tokens, $start, $end)) {
+        if (self::hasTopLevelAssignment($tokens, $start, $end)) {
             return self::GROUP_ASSIGNMENT;
+        }
+
+        if ($first->isGivenKind(self::CALL_LIKE_CONSTRUCT_TOKENS)) {
+            return self::GROUP_FUNCTION_CALL;
+        }
+
+        if (self::hasTopLevelMutation($tokens, $start, $end)) {
+            return self::GROUP_MUTATION;
+        }
+
+        if ($first->isGivenKind([T_CLONE, T_NEW])) {
+            return self::GROUP_OBJECT_CREATION;
         }
 
         $dispatchToken = self::findFirstTopLevelToken(
@@ -434,8 +509,8 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
             return self::GROUP_FUNCTION_CALL;
         }
 
-        if ($first->isGivenKind(T_NEW)) {
-            return self::GROUP_OBJECT_CREATION;
+        if ($first->isGivenKind([T_GLOBAL, T_STATIC])) {
+            return self::GROUP_VARIABLE_DECLARATION;
         }
 
         return 'other:' . self::statementSignature($first);
@@ -491,6 +566,13 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
                 ->setAllowedTypes(['bool'])
                 ->setDefault(true)
                 ->getOption(),
+            (new FixerOptionBuilder(
+                'separate_comment_led_statements',
+                'Whether sibling statements with leading comments should be separated from the previous sibling while keeping the leading comment block attached to its statement.',
+            ))
+                ->setAllowedTypes(['bool'])
+                ->setDefault(true)
+                ->getOption(),
         ]);
     }
 
@@ -531,13 +613,24 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
     private static function findFirstTopLevelToken(Tokens $tokens, int $start, int $end, callable $predicate): int | null
     {
         for ($index = $start; $index <= $end; ++$index) {
+            if ($predicate($tokens[$index])) {
+                return $index;
+            }
+
             if (self::isBlockStart($tokens[$index])) {
                 $index = self::findBlockEnd($tokens, $index);
 
                 continue;
             }
+        }
 
-            if ($predicate($tokens[$index])) {
+        return null;
+    }
+
+    private static function findLastCommentBetween(Tokens $tokens, int $start, int $end): int | null
+    {
+        for ($index = $end; $index >= $start; --$index) {
+            if ($tokens[$index]->isComment()) {
                 return $index;
             }
         }
@@ -565,6 +658,41 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
         }
 
         return null;
+    }
+
+    private static function findStatementHead(Tokens $tokens, int $start, int $limit): int
+    {
+        $head = $start;
+
+        while ($head <= $limit) {
+            if ($tokens[$head]->isGivenKind(T_ATTRIBUTE) && self::isBlockStart($tokens[$head])) {
+                $next = $tokens->getNextMeaningfulToken(self::findBlockEnd($tokens, $head));
+
+                if ($next === null || $next > $limit) {
+                    return $start;
+                }
+
+                $head = $next;
+
+                continue;
+            }
+
+            if ($tokens[$head]->isGivenKind(self::DECLARATION_MODIFIER_TOKENS)) {
+                $next = $tokens->getNextMeaningfulToken($head);
+
+                if ($next === null || $next > $limit) {
+                    return $head;
+                }
+
+                $head = $next;
+
+                continue;
+            }
+
+            return $head;
+        }
+
+        return $start;
     }
 
     private static function findSwitchCaseBodyEnd(Tokens $tokens, int $bodyStart, int $blockEnd): int
@@ -639,9 +767,19 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
         return false;
     }
 
-    private static function hasTopLevelAssignmentOrMutation(Tokens $tokens, int $start, int $end): bool
+    private static function hasTopLevelAssignment(Tokens $tokens, int $start, int $end): bool
     {
-        if ($tokens[$start]->isGivenKind([T_UNSET, T_INC, T_DEC])) {
+        return self::findFirstTopLevelToken(
+            $tokens,
+            $start,
+            $end,
+            static fn(Token $token): bool => $token->equalsAny(self::ASSIGNMENT_TOKENS),
+        ) !== null;
+    }
+
+    private static function hasTopLevelMutation(Tokens $tokens, int $start, int $end): bool
+    {
+        if ($tokens[$start]->isGivenKind([T_INC, T_DEC])) {
             return true;
         }
 
@@ -649,8 +787,13 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
             $tokens,
             $start,
             $end,
-            static fn(Token $token): bool => $token->equalsAny(self::ASSIGNMENT_TOKENS) || $token->isGivenKind([T_INC, T_DEC]),
+            static fn(Token $token): bool => $token->isGivenKind([T_INC, T_DEC]),
         ) !== null;
+    }
+
+    private static function isAnonymousFunctionStart(Tokens $tokens, int $functionIndex): bool
+    {
+        return !self::isNamedFunctionDeclaration($tokens, $functionIndex);
     }
 
     private static function isBlockStart(Token $token): bool
@@ -672,9 +815,35 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
             && !self::isMatchBlock($tokens, $blockStart);
     }
 
+    private static function isLabelStatement(Tokens $tokens, int $start, int $limit): bool
+    {
+        if (!$tokens[$start]->isGivenKind(T_STRING)) {
+            return false;
+        }
+
+        $next = $tokens->getNextMeaningfulToken($start);
+
+        return $next !== null && $next <= $limit && $tokens[$next]->equals(':');
+    }
+
     private static function isMatchBlock(Tokens $tokens, int $blockStart): bool
     {
         return self::blockOwnerContains($tokens, $blockStart, [T_MATCH]);
+    }
+
+    private static function isNamedFunctionDeclaration(Tokens $tokens, int $functionIndex): bool
+    {
+        $next = $tokens->getNextMeaningfulToken($functionIndex);
+
+        if ($next === null) {
+            return false;
+        }
+
+        if ($tokens[$next]->equalsAny(['&', [T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG], [T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG]])) {
+            $next = $tokens->getNextMeaningfulToken($next);
+        }
+
+        return $next !== null && $tokens[$next]->isGivenKind(T_STRING);
     }
 
     private static function isNamespaceBlock(Tokens $tokens, int $blockStart): bool
@@ -784,6 +953,18 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
         $previous = null;
 
         foreach ($statements as $statement) {
+            if ($this->configuration['separate_comment_led_statements'] && $statement->hasLeadingComment) {
+                $lastLeadingComment = self::findLastCommentBetween($tokens, $statement->visualStart, $statement->coreStart - 1);
+
+                if ($lastLeadingComment !== null) {
+                    $replacements[$statement->coreStart] = [
+                        'left_end' => $lastLeadingComment,
+                        'right_start' => $statement->coreStart,
+                        'blank_line' => false,
+                    ];
+                }
+            }
+
             if ($previous === null) {
                 $previous = $statement;
 
@@ -837,6 +1018,7 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
                 $visualEnd,
                 self::classifyStatement($tokens, $coreStart, $coreEnd),
                 self::isRangeMultiline($tokens, $visualStart, $visualEnd),
+                self::isRangeMultiline($tokens, $coreStart, $visualEnd),
                 self::hasCommentBetween($tokens, $visualStart, $coreStart - 1),
             );
 
@@ -848,7 +1030,14 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
 
     private function determineBlankLineBetween(Statement $left, Statement $right): bool | null
     {
-        if ($left->multiline || $right->multiline || $right->hasLeadingComment) {
+        $leftMultiline = $left->hasLeadingComment ? $left->coreMultiline : $left->multiline;
+        $rightMultiline = $right->hasLeadingComment ? $right->coreMultiline : $right->multiline;
+
+        if ($leftMultiline || $rightMultiline) {
+            return true;
+        }
+
+        if ($this->configuration['separate_comment_led_statements'] && $right->hasLeadingComment) {
             return true;
         }
 
@@ -861,7 +1050,8 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
 
     private function findControlStatementEnd(Tokens $tokens, int $statementStart, int $blockEnd, int $limit): int
     {
-        $first = $tokens[$statementStart];
+        $statementHead = self::findStatementHead($tokens, $statementStart, $limit);
+        $first = $tokens[$statementHead];
 
         if ($first->isGivenKind([T_IF, T_ELSEIF])) {
             $next = $tokens->getNextMeaningfulToken($blockEnd);
@@ -892,10 +1082,19 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
 
     private function findStatementEnd(Tokens $tokens, int $statementStart, int $limit): int
     {
-        $first = $tokens[$statementStart];
+        $statementHead = self::findStatementHead($tokens, $statementStart, $limit);
+        $first = $tokens[$statementHead];
+
+        if (self::isLabelStatement($tokens, $statementHead, $limit)) {
+            $next = $tokens->getNextMeaningfulToken($statementHead);
+
+            assert($next !== null);
+
+            return $next;
+        }
 
         if ($first->isGivenKind(T_ELSE)) {
-            $next = $tokens->getNextMeaningfulToken($statementStart);
+            $next = $tokens->getNextMeaningfulToken($statementHead);
 
             if ($next !== null && $next <= $limit && $tokens[$next]->isGivenKind(T_IF)) {
                 return $this->findStatementEnd($tokens, $next, $limit);
@@ -906,7 +1105,11 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
             if (self::isBlockStart($tokens[$index])) {
                 $blockEnd = self::findBlockEnd($tokens, $index);
 
-                if ($tokens[$index]->equals('{') && self::canCurlyBlockEndStatement($first)) {
+                if (
+                    $tokens[$index]->equals('{')
+                    && self::canCurlyBlockEndStatement($first)
+                    && (!$first->isGivenKind(T_FUNCTION) || !self::isAnonymousFunctionStart($tokens, $statementHead))
+                ) {
                     return $this->findControlStatementEnd($tokens, $statementStart, $blockEnd, $limit);
                 }
 

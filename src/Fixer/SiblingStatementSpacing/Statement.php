@@ -27,6 +27,7 @@ final readonly class Statement
         public int $visualEnd,
         public string $group,
         public bool $multiline,
+        public bool $coreMultiline,
         public bool $hasLeadingComment,
     ) {
     }
