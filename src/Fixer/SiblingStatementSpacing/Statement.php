@@ -28,7 +28,9 @@ final readonly class Statement
         public string $group,
         public bool $multiline,
         public bool $coreMultiline,
+        public bool $blockLike,
         public bool $hasLeadingComment,
+        public bool $hasTrailingComment,
     ) {
     }
 }

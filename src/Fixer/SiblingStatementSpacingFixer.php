@@ -34,6 +34,7 @@ use function array_push;
 use function array_values;
 use function assert;
 use function count;
+use function in_array;
 use function is_string;
 use function preg_replace;
 use function str_contains;
@@ -116,12 +117,20 @@ use const T_YIELD_FROM;
 
 /**
  * @phpstan-type _InputConfiguration array{
- *     separate_single_line_groups?: bool,
- *     separate_comment_led_statements?: bool,
+ *     separate_multiline_siblings?: bool,
+ *     single_line_policy?: 'preserve'|'compact_same_group'|'compact_all',
+ *     insert_blank_line_between_single_line_groups?: bool,
+ *     leading_comment_policy?: 'ignore'|'attach_to_next_statement',
+ *     trailing_comment_policy?: 'ignore'|'preserve_boundary',
+ *     process_case_bodies?: bool,
  * }
  * @phpstan-type _ComputedConfiguration array{
- *     separate_single_line_groups: bool,
- *     separate_comment_led_statements: bool,
+ *     separate_multiline_siblings: bool,
+ *     single_line_policy: 'preserve'|'compact_same_group'|'compact_all',
+ *     insert_blank_line_between_single_line_groups: bool,
+ *     leading_comment_policy: 'ignore'|'attach_to_next_statement',
+ *     trailing_comment_policy: 'ignore'|'preserve_boundary',
+ *     process_case_bodies: bool,
  * }
  *
  * @implements ConfigurableFixerInterface<_InputConfiguration, _ComputedConfiguration>
@@ -155,25 +164,12 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
     /**
      * @var list<int>
      */
-    private const CALL_LIKE_CONSTRUCT_TOKENS = [
-        T_ARRAY,
-        T_EMPTY,
-        T_EVAL,
-        T_ISSET,
-        T_LIST,
-        T_UNSET,
-    ];
-
-    /**
-     * @var list<int>
-     */
     private const CONTROL_TOKENS = [
         T_DECLARE,
         T_DO,
         T_FOR,
         T_FOREACH,
         T_IF,
-        T_MATCH,
         T_SWITCH,
         T_TRY,
         T_WHILE,
@@ -202,11 +198,25 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
 
     private const GROUP_ASSIGNMENT = 'assignment';
 
+    private const GROUP_CLONE_EXPRESSION = 'clone_expression';
+
     private const GROUP_CLOSURE = 'closure';
 
     private const GROUP_CONTROL = 'control';
 
     private const GROUP_DECLARATION = 'declaration';
+
+    private const GROUP_FLOW_EXIT = 'flow_exit';
+
+    private const GROUP_FLOW_GOTO = 'flow_goto';
+
+    private const GROUP_FLOW_LOOP = 'flow_loop';
+
+    private const GROUP_FLOW_RETURN = 'flow_return';
+
+    private const GROUP_FLOW_THROW = 'flow_throw';
+
+    private const GROUP_FLOW_YIELD = 'flow_yield';
 
     private const GROUP_FUNCTION_CALL = 'function_call';
 
@@ -214,17 +224,23 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
 
     private const GROUP_LABEL = 'label';
 
+    private const GROUP_LANGUAGE_CONSTRUCT = 'language_construct';
+
+    private const GROUP_MATCH_EXPRESSION = 'match_expression';
+
     private const GROUP_MUTATION = 'mutation';
 
     private const GROUP_OBJECT_CREATION = 'object_creation';
 
     private const GROUP_OBJECT_METHOD_CALL = 'object_method_call';
 
+    private const GROUP_OTHER_EXPRESSION = 'other_expression';
+
     private const GROUP_OUTPUT = 'output';
 
-    private const GROUP_STATIC_CALL = 'static_call';
+    private const GROUP_PREDICATE_CONSTRUCT = 'predicate_construct';
 
-    private const GROUP_TERMINAL = 'terminal';
+    private const GROUP_STATIC_CALL = 'static_call';
 
     private const GROUP_THIS_METHOD_CALL = 'this_method_call';
 
@@ -246,20 +262,6 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
     private const OUTPUT_TOKENS = [
         T_ECHO,
         T_PRINT,
-    ];
-
-    /**
-     * @var list<int>
-     */
-    private const TERMINAL_TOKENS = [
-        T_BREAK,
-        T_CONTINUE,
-        T_EXIT,
-        T_GOTO,
-        T_RETURN,
-        T_THROW,
-        T_YIELD,
-        T_YIELD_FROM,
     ];
 
     /**
@@ -315,7 +317,7 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
     public function getDefinition(): FixerDefinitionInterface
     {
         return new FixerDefinition(
-            'Normalizes blank lines between direct sibling statements: multiline statements and comment-led statements are separated, and single-line statements are optionally grouped by statement shape.',
+            'Normalizes blank lines between direct sibling statements: multiline or block-like statements are separated, leading comments are attached to the following statement, and single-line statements can be compacted by visual group.',
             [
                 new CodeSample(
                     <<<'PHP'
@@ -351,7 +353,7 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
                         }
 
                         PHP,
-                    ['separate_single_line_groups' => false],
+                    ['single_line_policy' => 'preserve'],
                 ),
             ],
         );
@@ -446,8 +448,28 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
         $head = self::findStatementHead($tokens, $start, $end);
         $first = $tokens[$head];
 
-        if ($first->isGivenKind(self::TERMINAL_TOKENS)) {
-            return self::GROUP_TERMINAL;
+        if ($first->isGivenKind(T_RETURN)) {
+            return self::GROUP_FLOW_RETURN;
+        }
+
+        if ($first->isGivenKind(T_THROW)) {
+            return self::GROUP_FLOW_THROW;
+        }
+
+        if ($first->isGivenKind([T_YIELD, T_YIELD_FROM])) {
+            return self::GROUP_FLOW_YIELD;
+        }
+
+        if ($first->isGivenKind([T_BREAK, T_CONTINUE])) {
+            return self::GROUP_FLOW_LOOP;
+        }
+
+        if ($first->isGivenKind(T_GOTO)) {
+            return self::GROUP_FLOW_GOTO;
+        }
+
+        if ($first->isGivenKind(T_EXIT)) {
+            return self::GROUP_FLOW_EXIT;
         }
 
         if ($first->isGivenKind(self::CONTROL_TOKENS)) {
@@ -478,16 +500,32 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
             return self::GROUP_ASSIGNMENT;
         }
 
-        if ($first->isGivenKind(self::CALL_LIKE_CONSTRUCT_TOKENS)) {
-            return self::GROUP_FUNCTION_CALL;
-        }
-
-        if (self::hasTopLevelMutation($tokens, $start, $end)) {
+        if ($first->isGivenKind(T_UNSET) || self::hasTopLevelMutation($tokens, $start, $end)) {
             return self::GROUP_MUTATION;
         }
 
-        if ($first->isGivenKind([T_CLONE, T_NEW])) {
+        if ($first->isGivenKind([T_EMPTY, T_ISSET])) {
+            return self::GROUP_PREDICATE_CONSTRUCT;
+        }
+
+        if ($first->isGivenKind(T_EVAL)) {
+            return self::GROUP_LANGUAGE_CONSTRUCT;
+        }
+
+        if ($first->isGivenKind(T_MATCH)) {
+            return self::GROUP_MATCH_EXPRESSION;
+        }
+
+        if ($first->isGivenKind(T_ARRAY) || $first->isGivenKind(T_LIST)) {
+            return self::GROUP_OTHER_EXPRESSION;
+        }
+
+        if ($first->isGivenKind(T_NEW)) {
             return self::GROUP_OBJECT_CREATION;
+        }
+
+        if ($first->isGivenKind(T_CLONE)) {
+            return self::GROUP_CLONE_EXPRESSION;
         }
 
         $dispatchToken = self::findFirstTopLevelToken(
@@ -560,15 +598,46 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
     {
         return new FixerConfigurationResolver([
             (new FixerOptionBuilder(
-                'separate_single_line_groups',
-                'Whether single-line sibling statements should be collapsed inside the same group and separated between different groups.',
+                'separate_multiline_siblings',
+                'Whether sibling statements should be separated when at least one of them is multiline or block-like.',
             ))
                 ->setAllowedTypes(['bool'])
                 ->setDefault(true)
                 ->getOption(),
             (new FixerOptionBuilder(
-                'separate_comment_led_statements',
-                'Whether sibling statements with leading comments should be separated from the previous sibling while keeping the leading comment block attached to its statement.',
+                'single_line_policy',
+                'How blank lines between single-line sibling statements should be normalized.',
+            ))
+                ->setAllowedTypes(['string'])
+                ->setAllowedValues(['preserve', 'compact_same_group', 'compact_all'])
+                ->setDefault('compact_same_group')
+                ->getOption(),
+            (new FixerOptionBuilder(
+                'insert_blank_line_between_single_line_groups',
+                'Whether different single-line statement groups should be separated by a blank line.',
+            ))
+                ->setAllowedTypes(['bool'])
+                ->setDefault(false)
+                ->getOption(),
+            (new FixerOptionBuilder(
+                'leading_comment_policy',
+                'How standalone leading comments between sibling statements should be attached to the next statement.',
+            ))
+                ->setAllowedTypes(['string'])
+                ->setAllowedValues(['ignore', 'attach_to_next_statement'])
+                ->setDefault('attach_to_next_statement')
+                ->getOption(),
+            (new FixerOptionBuilder(
+                'trailing_comment_policy',
+                'How single-line sibling boundaries after trailing inline comments should be handled.',
+            ))
+                ->setAllowedTypes(['string'])
+                ->setAllowedValues(['ignore', 'preserve_boundary'])
+                ->setDefault('preserve_boundary')
+                ->getOption(),
+            (new FixerOptionBuilder(
+                'process_case_bodies',
+                'Whether sibling statement spacing should be normalized inside switch case/default bodies.',
             ))
                 ->setAllowedTypes(['bool'])
                 ->setDefault(true)
@@ -796,6 +865,20 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
         return !self::isNamedFunctionDeclaration($tokens, $functionIndex);
     }
 
+    private static function isBlockLikeStatement(Tokens $tokens, int $start, int $end, string $group): bool
+    {
+        if (!in_array($group, [self::GROUP_CONTROL, self::GROUP_DECLARATION], true)) {
+            return false;
+        }
+
+        return self::findFirstTopLevelToken(
+            $tokens,
+            $start,
+            $end,
+            static fn(Token $token): bool => $token->equals('{'),
+        ) !== null;
+    }
+
     private static function isBlockStart(Token $token): bool
     {
         $blockType = Tokens::detectBlockType($token);
@@ -926,8 +1009,10 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
             $blockEnd = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_CURLY_BRACE, $index);
 
             if (self::isSwitchBlock($tokens, $index)) {
-                foreach (self::collectSwitchCaseRanges($tokens, $index, $blockEnd) as $range) {
-                    array_push($replacements, ...$this->collectStatementListReplacements($tokens, $range['start'], $range['end']));
+                if ($this->configuration['process_case_bodies']) {
+                    foreach (self::collectSwitchCaseRanges($tokens, $index, $blockEnd) as $range) {
+                        array_push($replacements, ...$this->collectStatementListReplacements($tokens, $range['start'], $range['end']));
+                    }
                 }
 
                 continue;
@@ -953,7 +1038,7 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
         $previous = null;
 
         foreach ($statements as $statement) {
-            if ($this->configuration['separate_comment_led_statements'] && $statement->hasLeadingComment) {
+            if ($this->configuration['leading_comment_policy'] === 'attach_to_next_statement' && $statement->hasLeadingComment) {
                 $lastLeadingComment = self::findLastCommentBetween($tokens, $statement->visualStart, $statement->coreStart - 1);
 
                 if ($lastLeadingComment !== null) {
@@ -1010,16 +1095,19 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
 
             $coreEnd = $this->findStatementEnd($tokens, $coreStart, $end);
             $visualEnd = self::findVisualEnd($tokens, $coreEnd, $end);
+            $group = self::classifyStatement($tokens, $coreStart, $coreEnd);
 
             $statements[] = new Statement(
                 $visualStart,
                 $coreStart,
                 $coreEnd,
                 $visualEnd,
-                self::classifyStatement($tokens, $coreStart, $coreEnd),
+                $group,
                 self::isRangeMultiline($tokens, $visualStart, $visualEnd),
                 self::isRangeMultiline($tokens, $coreStart, $visualEnd),
+                self::isBlockLikeStatement($tokens, $coreStart, $coreEnd, $group),
                 self::hasCommentBetween($tokens, $visualStart, $coreStart - 1),
+                $visualEnd !== $coreEnd,
             );
 
             $cursor = $visualEnd + 1;
@@ -1030,22 +1118,38 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
 
     private function determineBlankLineBetween(Statement $left, Statement $right): bool | null
     {
-        $leftMultiline = $left->hasLeadingComment ? $left->coreMultiline : $left->multiline;
-        $rightMultiline = $right->hasLeadingComment ? $right->coreMultiline : $right->multiline;
-
-        if ($leftMultiline || $rightMultiline) {
+        if (
+            $this->configuration['separate_multiline_siblings']
+            && ($left->coreMultiline || $right->coreMultiline || $left->blockLike || $right->blockLike)
+        ) {
             return true;
         }
 
-        if ($this->configuration['separate_comment_led_statements'] && $right->hasLeadingComment) {
+        if ($this->configuration['leading_comment_policy'] === 'attach_to_next_statement' && $right->hasLeadingComment) {
             return true;
         }
 
-        if (!$this->configuration['separate_single_line_groups']) {
+        if ($right->hasLeadingComment) {
             return null;
         }
 
-        return $left->group !== $right->group;
+        if ($this->configuration['trailing_comment_policy'] === 'preserve_boundary' && $left->hasTrailingComment) {
+            return null;
+        }
+
+        if ($this->configuration['single_line_policy'] === 'compact_all') {
+            return false;
+        }
+
+        if ($this->configuration['single_line_policy'] === 'compact_same_group' && $left->group === $right->group) {
+            return false;
+        }
+
+        if ($this->configuration['insert_blank_line_between_single_line_groups'] && $left->group !== $right->group) {
+            return true;
+        }
+
+        return null;
     }
 
     private function findControlStatementEnd(Tokens $tokens, int $statementStart, int $blockEnd, int $limit): int
