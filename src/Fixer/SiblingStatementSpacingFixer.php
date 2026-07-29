@@ -1002,11 +1002,11 @@ final class SiblingStatementSpacingFixer implements ConfigurableFixerInterface, 
 
             $blockType = Tokens::detectBlockType($tokens[$index]);
 
-            if ($blockType === null || $blockType['type'] !== Tokens::BLOCK_TYPE_CURLY_BRACE || $blockType['isStart'] === false) {
+            if ($blockType === null || $blockType['isStart'] === false) {
                 continue;
             }
 
-            $blockEnd = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_CURLY_BRACE, $index);
+            $blockEnd = $tokens->findBlockEnd($blockType['type'], $index);
 
             if (self::isSwitchBlock($tokens, $index)) {
                 if ($this->configuration['process_case_bodies']) {
