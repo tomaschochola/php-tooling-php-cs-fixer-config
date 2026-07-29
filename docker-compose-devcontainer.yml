@@ -1,3 +1,4 @@
+name: 'tooling-php-cs-fixer-devcontainer'
 networks:
   devcontainer:
     internal: false
