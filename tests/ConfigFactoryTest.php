@@ -34,11 +34,18 @@ use TomasChochola\Tooling\PhpCsFixer\Fixer\SiblingStatementSpacingFixer;
 class ConfigFactoryTest extends TestCase
 {
     #[Test()]
-    public function testMake(): void
+    public function testCreatesConfiguration(): void
     {
-        $config = ConfigFactory::create(self::createStub(Finder::class), []);
+        $finder = self::createStub(Finder::class);
+        $rules = ['strict_param' => true];
+        $config = ConfigFactory::create($finder, $rules);
 
-        self::assertNotEmpty($config->getCustomFixers());
+        self::assertSame($finder, $config->getFinder());
+        self::assertSame('    ', $config->getIndent());
+        self::assertSame("\n", $config->getLineEnding());
+        self::assertTrue($config->getRiskyAllowed());
+        self::assertSame($rules, $config->getRules());
+        self::assertCount(1, $config->getCustomFixers());
         self::assertContainsOnlyInstancesOf(SiblingStatementSpacingFixer::class, $config->getCustomFixers());
     }
 }

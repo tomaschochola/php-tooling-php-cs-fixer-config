@@ -24,8 +24,12 @@ use TomasChochola\Tooling\PhpCsFixer\Fixer\SiblingStatementSpacingFixer;
 /**
  * @no-named-arguments
  */
-readonly class ConfigFactory
+final class ConfigFactory
 {
+    private function __construct()
+    {
+    }
+
     /**
      * @param array<string, array<string, mixed>|bool> $rules
      */
@@ -38,11 +42,11 @@ readonly class ConfigFactory
         ]);
 
         $config->setFinder($finder);
+        $config->setIndent('    ');
         $config->setLineEnding("\n");
         $config->setParallelConfig(ParallelConfigFactory::detect());
         $config->setRiskyAllowed(true);
         $config->setRules($rules);
-        $config->setUnsupportedPhpVersionAllowed(true);
 
         return $config;
     }

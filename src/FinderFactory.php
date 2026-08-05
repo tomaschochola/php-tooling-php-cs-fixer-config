@@ -20,8 +20,12 @@ use PhpCsFixer\Finder;
 /**
  * @no-named-arguments
  */
-readonly class FinderFactory
+final class FinderFactory
 {
+    private function __construct()
+    {
+    }
+
     public static function create(): Finder
     {
         return (new Finder())

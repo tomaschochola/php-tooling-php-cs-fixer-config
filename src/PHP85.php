@@ -20,8 +20,12 @@ use TomasChochola\Tooling\PhpCsFixer\Fixer\SiblingStatementSpacingFixer;
 /**
  * @no-named-arguments
  */
-readonly class PHP85
+final class PHP85
 {
+    private function __construct()
+    {
+    }
+
     /**
      * @return array<string, array<string, mixed>|bool>
      */
