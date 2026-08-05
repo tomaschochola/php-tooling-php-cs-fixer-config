@@ -31,7 +31,10 @@
     "TomasChochola",
     "Tomas Chochola",
     "Tomáš Chochola",
-    "tooling-php-cs-fixer"
+    "code-style",
+    "coding-standard",
+    "php-cs-fixer",
+    "tooling"
   ],
   "license": "CC-BY-ND-4.0",
   "name": "@tomaschochola/tooling-php-cs-fixer",
