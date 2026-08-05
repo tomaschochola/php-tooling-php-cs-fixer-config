@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fd7d56a60ac17381ffa8af14e9dadd7c",
+    "content-hash": "920e058228c8550157dcf57bb3575b1b",
     "packages": [
         {
             "name": "clue/ndjson-react",
@@ -3081,60 +3081,12 @@
             "time": "2022-02-21T01:04:05+00:00"
         },
         {
-            "name": "phpstan/extension-installer",
-            "version": "1.4.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phpstan/extension-installer.git",
-                "reference": "85e90b3942d06b2326fba0403ec24fe912372936"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/extension-installer/zipball/85e90b3942d06b2326fba0403ec24fe912372936",
-                "reference": "85e90b3942d06b2326fba0403ec24fe912372936",
-                "shasum": ""
-            },
-            "require": {
-                "composer-plugin-api": "^2.0",
-                "php": "^7.2 || ^8.0",
-                "phpstan/phpstan": "^1.9.0 || ^2.0"
-            },
-            "require-dev": {
-                "composer/composer": "^2.0",
-                "php-parallel-lint/php-parallel-lint": "^1.2.0",
-                "phpstan/phpstan-strict-rules": "^0.11 || ^0.12 || ^1.0"
-            },
-            "type": "composer-plugin",
-            "extra": {
-                "class": "PHPStan\\ExtensionInstaller\\Plugin"
-            },
-            "autoload": {
-                "psr-4": {
-                    "PHPStan\\ExtensionInstaller\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Composer plugin for automatic installation of PHPStan extensions",
-            "keywords": [
-                "dev",
-                "static analysis"
-            ],
-            "support": {
-                "issues": "https://github.com/phpstan/extension-installer/issues",
-                "source": "https://github.com/phpstan/extension-installer/tree/1.4.3"
-            },
-            "time": "2024-09-04T20:21:43+00:00"
-        },
-        {
             "name": "phpstan/phpstan",
-            "version": "2.2.7",
+            "version": "2.2.8",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/692db47b9dddb0487934e5236e77d48594aef921",
-                "reference": "692db47b9dddb0487934e5236e77d48594aef921",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/e285254e60f33c21902efef4a926ca0987c06804",
+                "reference": "e285254e60f33c21902efef4a926ca0987c06804",
                 "shasum": ""
             },
             "require": {
@@ -3190,7 +3142,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-07-29T17:39:32+00:00"
+            "time": "2026-08-04T22:21:45+00:00"
         },
         {
             "name": "phpstan/phpstan-beberlei-assert",
@@ -6501,21 +6453,20 @@
         },
         {
             "name": "tomaschochola/tooling-phpstan",
-            "version": "1.x-dev",
+            "version": "2.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tomaschochola/tooling-phpstan.git",
-                "reference": "18325cdf7a554f99576589ce6e0f9a1ed0a94f17"
+                "reference": "5b874cfaae6db68c2f89a5c1f804f9ab0499dbf6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tomaschochola/tooling-phpstan/zipball/18325cdf7a554f99576589ce6e0f9a1ed0a94f17",
-                "reference": "18325cdf7a554f99576589ce6e0f9a1ed0a94f17",
+                "url": "https://api.github.com/repos/tomaschochola/tooling-phpstan/zipball/5b874cfaae6db68c2f89a5c1f804f9ab0499dbf6",
+                "reference": "5b874cfaae6db68c2f89a5c1f804f9ab0499dbf6",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.5.0",
-                "phpstan/extension-installer": "^1.4",
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-beberlei-assert": "^2.0",
                 "phpstan/phpstan-deprecation-rules": "^2.0",
@@ -6535,7 +6486,6 @@
                 "ext-zip": "*",
                 "roave/security-advisories": "dev-latest"
             },
-            "default-branch": true,
             "type": "library",
             "license": [
                 "CC-BY-ND-4.0"
@@ -6545,20 +6495,18 @@
                     "email": "tomaschochola@tomaschochola.cz",
                     "homepage": "https://github.com/tomaschochola",
                     "name": "Tomáš Chochola",
-                    "role": "Author"
+                    "role": "Enterprise Architect"
                 }
             ],
-            "description": "tomaschochola/tooling-phpstan",
+            "description": "Shared strict PHPStan 2 configuration for PHP 8.5 libraries and applications.",
             "homepage": "https://github.com/tomaschochola/tooling-phpstan",
             "keywords": [
-                "Tomas Chochola",
-                "TomasChochola",
-                "Tomáš Chochola",
+                "phpstan",
+                "static-analysis",
                 "tomaschochola",
-                "tooling-phpstan"
+                "tooling"
             ],
             "support": {
-                "docs": "https://github.com/tomaschochola/tooling-phpstan",
                 "email": "tomaschochola@tomaschochola.cz",
                 "issues": "https://github.com/tomaschochola/tooling-phpstan/issues",
                 "source": "https://github.com/tomaschochola/tooling-phpstan.git"
@@ -6569,7 +6517,7 @@
                     "url": "https://github.com/sponsors/tomaschochola"
                 }
             ],
-            "time": "2026-07-29T10:41:43+00:00"
+            "time": "2026-08-05T10:28:47+00:00"
         }
     ],
     "aliases": [],
