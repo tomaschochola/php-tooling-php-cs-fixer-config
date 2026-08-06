@@ -75,7 +75,7 @@
     "ext-zip": "*",
     "phpunit/phpunit": "^13.0",
     "roave/security-advisories": "dev-latest",
-    "tomaschochola/tooling-phpstan": "^2.0@dev"
+    "tomaschochola/tooling-phpstan": "dev-main"
   },
   "support": {
     "email": "tomaschochola@tomaschochola.cz",
