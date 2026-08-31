@@ -1,86 +1,86 @@
 {
-  "authors": [
-    {
-      "email": "tomaschochola@tomaschochola.cz",
-      "homepage": "https://github.com/tomaschochola",
-      "name": "Tomáš Chochola",
-      "role": "Author"
-    }
-  ],
-  "autoload": {
-    "psr-4": {
-      "TomasChochola\\Tooling\\PhpCsFixer\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Tests\\": "tests/"
-    }
-  },
-  "config": {
-    "allow-plugins": false,
-    "platform-check": true,
-    "policy": {
-      "abandoned": {
-        "audit": "fail",
-        "block": true
-      },
-      "advisories": {
-        "audit": "fail",
-        "block": true
-      },
-      "malware": {
-        "audit": "fail",
-        "block": true
-      }
+    "authors": [
+        {
+            "email": "tomaschochola@tomaschochola.cz",
+            "homepage": "https://github.com/tomaschochola",
+            "name": "Tomáš Chochola",
+            "role": "Author"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "TomasChochola\\Tooling\\PhpCsFixer\\": "src/"
+        }
     },
-    "sort-packages": true
-  },
-  "description": "Shared PHP CS Fixer configuration and custom coding-standard fixers for PHP 8.5.",
-  "funding": [
-    {
-      "type": "github",
-      "url": "https://github.com/sponsors/tomaschochola"
-    }
-  ],
-  "homepage": "https://github.com/tomaschochola/tooling-php-cs-fixer",
-  "keywords": [
-    "tomaschochola",
-    "TomasChochola",
-    "Tomas Chochola",
-    "Tomáš Chochola",
-    "code-style",
-    "coding-standard",
-    "php-cs-fixer",
-    "tooling"
-  ],
-  "license": "CC-BY-ND-4.0",
-  "name": "tomaschochola/tooling-php-cs-fixer",
-  "prefer-stable": true,
-  "repositories": [
-    {
-      "no-api": true,
-      "type": "vcs",
-      "url": "https://github.com/tomaschochola/tooling-phpstan.git"
-    }
-  ],
-  "require": {
-    "friendsofphp/php-cs-fixer": "^3.92",
-    "php": "^8.5.0"
-  },
-  "require-dev": {
-    "ext-intl": "*",
-    "ext-pcntl": "*",
-    "ext-xdebug": "*",
-    "ext-zip": "*",
-    "phpunit/phpunit": "^13.0",
-    "roave/security-advisories": "dev-latest",
-    "tomaschochola/tooling-phpstan": "dev-main"
-  },
-  "support": {
-    "email": "tomaschochola@tomaschochola.cz",
-    "issues": "https://github.com/tomaschochola/tooling-php-cs-fixer/issues",
-    "source": "https://github.com/tomaschochola/tooling-php-cs-fixer.git"
-  },
-  "type": "library"
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": false,
+        "platform-check": true,
+        "policy": {
+            "abandoned": {
+                "audit": "fail",
+                "block": true
+            },
+            "advisories": {
+                "audit": "fail",
+                "block": true
+            },
+            "malware": {
+                "audit": "fail",
+                "block": true
+            }
+        },
+        "sort-packages": true
+    },
+    "description": "Shared PHP CS Fixer configuration and custom coding-standard fixers for PHP 8.5.",
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/tomaschochola"
+        }
+    ],
+    "homepage": "https://github.com/tomaschochola/tooling-php-cs-fixer",
+    "keywords": [
+        "tomaschochola",
+        "TomasChochola",
+        "Tomas Chochola",
+        "Tomáš Chochola",
+        "code-style",
+        "coding-standard",
+        "php-cs-fixer",
+        "tooling"
+    ],
+    "license": "CC-BY-ND-4.0",
+    "name": "tomaschochola/tooling-php-cs-fixer",
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "no-api": true,
+            "type": "vcs",
+            "url": "https://github.com/tomaschochola/tooling-phpstan.git"
+        }
+    ],
+    "require": {
+        "friendsofphp/php-cs-fixer": "^3.92",
+        "php": "^8.5.0"
+    },
+    "require-dev": {
+        "ext-intl": "*",
+        "ext-pcntl": "*",
+        "ext-xdebug": "*",
+        "ext-zip": "*",
+        "phpunit/phpunit": "^13.0",
+        "roave/security-advisories": "dev-latest",
+        "tomaschochola/tooling-phpstan": "dev-main"
+    },
+    "support": {
+        "email": "tomaschochola@tomaschochola.cz",
+        "issues": "https://github.com/tomaschochola/tooling-php-cs-fixer/issues",
+        "source": "https://github.com/tomaschochola/tooling-php-cs-fixer.git"
+    },
+    "type": "library"
 }
